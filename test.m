@@ -2,6 +2,8 @@ clear;
 
 addpath('./casadi');
 addpath('./ui');
+addpath('./visualizer');
+addpath('./manager');
 
 import casadi.*;
 import CasadiTuner.*;
