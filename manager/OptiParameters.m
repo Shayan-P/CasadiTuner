@@ -17,8 +17,8 @@ classdef OptiParameters
         function new_this = updated(this, name, value)
             for i=1:this.N
                 if name == this.names{i}
-                    new_names = this.names;
-                    new_values = this.values;
+                    new_names = this.names;    % todo make sure this is copying 
+                    new_values = this.values;  % todo make sure this is copying
                     new_values(i) = value;
                     new_this = OptiParameters(new_names, new_values);
                     return;

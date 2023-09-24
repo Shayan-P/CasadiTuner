@@ -14,6 +14,10 @@ classdef OptiResult < handle
         count_children
     end
 
+    properties
+        data  % for user to store information here. should discard when load/save happens
+    end
+
     methods
         function this = OptiResult(opti_gui, parent_result)
             arguments
@@ -37,6 +41,14 @@ classdef OptiResult < handle
             this.opti_p = opti.value(opti.x);
             this.opti_lbg = opti.value(opti.x);
             this.opti_ubg = opti.value(opti.ubg);
+        end
+
+        function setName(this, name)
+            arguments
+                this
+                name string
+            end
+            this.name = name;
         end
     end
 
