@@ -12,7 +12,7 @@ classdef ParametersVisualizer < handle
             % Set the figure size
             this.fig.Position(3:4) = [500, 500];
 
-            N = length(tuners);
+            N = length(this.tuners);
             
             grid = uigridlayout(this.fig, [N, 3], 'Scrollable', 'on');
             grid.RowHeight = repmat({40}, 1, N);
