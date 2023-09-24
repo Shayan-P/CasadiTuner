@@ -1,4 +1,4 @@
-classdef (Abstract) ParameterTuner
+classdef (Abstract) ParameterTuner < handle
     properties (Abstract, SetAccess=immutable)
         name
     end
