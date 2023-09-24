@@ -25,7 +25,7 @@ classdef ParametersVisualizer < handle
         end
     end
 
-    methods(Access=private)
+    methods(Access=public)
         function update(this, opti_parameters)
             arguments
                 this

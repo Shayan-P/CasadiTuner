@@ -30,7 +30,7 @@ classdef OptiGUI < handle
 
             % optimize callback. added automatically
             % todo: is this better or should we let the user add it manually?
-            this.add_callback("optimize", @(opti_gui) OptiGUI.optimization(opti_gui));
+            this.add_callback("optimize", @(opti_gui) OptiGUI.optimize_callback(opti_gui));
         end
 
         function param = parameter_bool(this, name, default_value)
@@ -93,7 +93,7 @@ classdef OptiGUI < handle
                 this
                 opti_result OptiResult
             end
-            this.opti.set_value(this.opti.x, opti_result.opti_x);
+            this.opti.set_initial(this.opti.x, opti_result.opti_x);
             this.opti.set_value(this.opti.p, opti_result.opti_p);
         end
     end
@@ -128,10 +128,8 @@ classdef OptiGUI < handle
         function tune(this)
             this.control_panel = ControlsVisualizer(this, this.callback_names, this.callbacks);            
             this.parameter_panel = ParametersVisualizer(this);
-
-            sync_parameter_panel = @(opti_result) this.parameter_panel.update(opti_result.opti_parameters);
-
-            this.results_panel = ResultsVisualizer(this.manager, @sync_parameter_panel);
+            this.results_panel = ResultsVisualizer(this.manager, ...
+                                @(opti_result) this.parameter_panel.update(opti_result.opti_parameters));
         end
     end
 end

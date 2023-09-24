@@ -1,12 +1,15 @@
 classdef OptiResult < handle
     properties(SetAccess=immutable)
         opti_parameters OptiParameters
-        parent_result OptiResult
         opti_x
         opti_p
         opti_lbg
         opti_ubg
         has_parent
+    end
+
+    properties(SetAccess=private)
+        parent_result OptiResult
     end
 
     properties(SetAccess=private)
@@ -18,20 +21,22 @@ classdef OptiResult < handle
         data  % for user to store information here. should discard when load/save happens
     end
 
-    methods
-        function this = OptiResult(opti_gui, parent_result)
+    methods (Access=private)
+        function this = OptiResult(opti_gui, optional_parent_result)
             arguments
                 opti_gui OptiGUI
-                parent_result OptiResult
+                optional_parent_result cell
             end
-            if nargin == 2  % todo make sure nargin == 2 is correct
-                this.parent_result = parent_result;
-                this.parent_result.count_children = this.parent_result.count_children + 1;
-                this.name = this.parent_result.name + string(this.parent_result.count_children);
-                this.has_parent = true;
-            else 
+
+            this.count_children = 0;
+            if isempty(optional_parent_result)
                 this.name = "root";
                 this.has_parent = false;
+            else
+                this.parent_result = optional_parent_result{1};
+                this.parent_result.count_children = this.parent_result.count_children + 1;
+                this.name = this.parent_result.name + string(this.parent_result.count_children);
+                this.has_parent = true;    
             end
 
             this.opti_parameters = OptiParameters.from_opti_gui(opti_gui);
@@ -42,7 +47,9 @@ classdef OptiResult < handle
             this.opti_lbg = opti.value(opti.lbg);
             this.opti_ubg = opti.value(opti.ubg);
         end
+    end
 
+    methods
         function setName(this, name)
             arguments
                 this
@@ -54,10 +61,10 @@ classdef OptiResult < handle
 
     methods(Static)
         function this = capture_opti_gui(opti_gui, parent_result)
-            this = OptiResult(opti_gui, parent_result);
+            this = OptiResult(opti_gui, {parent_result});
         end
         function this = capture_opti_gui_root(opti_gui)
-            this = OptiResult(opti_gui);
+            this = OptiResult(opti_gui, {});
         end
     end
 end

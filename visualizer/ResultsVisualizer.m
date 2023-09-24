@@ -27,8 +27,8 @@ classdef ResultsVisualizer < handle
             % todo make a better UI here...
 
             this.tree = uitree(g, 'Editable', 'on', ...
-                'ClickedFcn', @(tree, ~) selectNode(tree.SelectedNodes),...
-                'NodeTextChanged', @(node, ~) node.NodeData.setName(node.Text)); % todo check if callback works correctly
+                'ClickedFcn', @(tree, ~) this.clickCallback(),...
+                'NodeTextChanged', @(~, event) this.nodeTextChangeCallback(event)); % todo check if callback works correctly
             this.tree.Layout.Column = 1;
             this.tree.Layout.Row = 1;
 
@@ -40,11 +40,11 @@ classdef ResultsVisualizer < handle
             opti_result_manager.add_update_callback(@(opti_result) this.add_result_and_select(opti_result));
         end
 
-        function tree_node = add_result(~, opti_result)
+        function tree_node = add_result(this, opti_result)
             if opti_result.has_parent
                 tree_node = uitreenode(opti_result.parent_result.data, 'Text', opti_result.name);
             else
-                tree_node = uitreenode(t, 'Text', opti_result.name);
+                tree_node = uitreenode(this.tree, 'Text', opti_result.name);
             end
             tree_node.NodeData = opti_result;
             opti_result.data = tree_node;
@@ -52,13 +52,28 @@ classdef ResultsVisualizer < handle
 
         function tree_node = add_result_and_select(this, opti_result)
             tree_node = this.add_result(opti_result);
-            selectNode(tree_node);
+            if opti_result.has_parent
+                expand(opti_result.parent_result.data)
+            end
+            this.selectNode(tree_node);
         end
     end
 
     methods(Access=private)
+        function clickCallback(this)
+            if ~isempty(this.tree.SelectedNodes)
+                this.selectNode(this.tree.SelectedNodes);
+            end
+        end
+
+        function nodeTextChangeCallback(~, event)
+            node = event.Node;
+            text = event.Text;
+            node.NodeData.setName(text);
+        end
+
         function selectNode(this, node)
-            expand(node)
+            expand(node);
             this.tree.SelectedNodes = node;
             this.last_selected_opti_result = node.NodeData;
             this.set_result_callback(node.NodeData);
