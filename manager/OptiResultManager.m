@@ -15,6 +15,14 @@ classdef OptiResultManager < handle
             end
         end
 
+        function add_result(this, result)
+            arguments
+                this
+                result OptiResult
+            end
+            this.results{end+1} = result;
+        end
+
         function save(this)
             results = this.results;
             save(this.filepath, "results");

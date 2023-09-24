@@ -6,6 +6,7 @@ classdef OptiResult < handle
         opti_p
         opti_lbg
         opti_ubg
+        has_parent
     end
 
     properties(SetAccess=private)
@@ -19,15 +20,17 @@ classdef OptiResult < handle
                 opti_gui OptiGUI
                 parent_result OptiResult
             end
-            if nargin == 2
+            if nargin == 2  % todo make sure nargin == 2 is correct
                 this.parent_result = parent_result;
                 this.parent_result.count_children = this.parent_result.count_children + 1;
                 this.name = this.parent_result.name + string(this.parent_result.count_children);
+                this.has_parent = true;
             else 
                 this.name = "root";
+                this.has_parent = false;
             end
 
-            this.opti_parameters = get_opti_parameters(opti_gui);
+            this.opti_parameters = OptiParameters.from_opti_gui(opti_gui);
 
             opti = opti_gui.opti;
             this.opti_x = opti.value(opti.x);
@@ -44,18 +47,5 @@ classdef OptiResult < handle
         function this = capture_opti_gui_root(opti_gui)
             this = OptiResult(opti_gui);
         end
-    end
-
-    methods(Access=private)
-        function opti_parameters = get_opti_parameters(opti_gui) 
-            param_names = [];
-            param_values = [];
-            for i=1:length(opti_gui.parameters)
-                param_names = [param_names, opti_gui.tuners{i}.name];
-                param_values = [param_values, opti_gui.tuners{i}.getValue()];
-            end
-            opti_parameters = OptiParameters(param_names, param_values);
-        end      
-
     end
 end
