@@ -1,6 +1,5 @@
 classdef ScalarParameterTuner < ParameterTuner
     properties (SetAccess = immutable)
-        updateCallback
         name
     end
     properties (SetAccess = private)
@@ -12,14 +11,13 @@ classdef ScalarParameterTuner < ParameterTuner
     end
 
     methods
-        function this = ScalarParameterTuner(name, lbound, default_value, ubound, updateCallback)
+        function this = ScalarParameterTuner(name, lbound, default_value, ubound)
             assert(lbound <= default_value && default_value <= ubound, "lbound <= default_value <= ubound should hold");
 
             this.name = name;
             this.lbound = lbound;
             this.default_value = default_value;
             this.ubound = ubound;
-            this.updateCallback = updateCallback;
         end
 
         function add_name_value_editor(this, parent)
@@ -47,7 +45,6 @@ classdef ScalarParameterTuner < ParameterTuner
         function update(this, value)
             this.slider.Value = value;
             this.valueField.Text = string(value);
-            this.updateCallback(value);
         end
     end
 end

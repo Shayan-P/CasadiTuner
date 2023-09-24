@@ -1,6 +1,5 @@
 classdef (Abstract) ParameterTuner
     properties (Abstract, SetAccess=immutable)
-        updateCallback
         name
     end
 

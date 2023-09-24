@@ -1,6 +1,5 @@
 classdef BoolParameterTuner < ParameterTuner
     properties (SetAccess = immutable)
-        updateCallback
         name
     end
     properties (SetAccess = private)
@@ -10,11 +9,10 @@ classdef BoolParameterTuner < ParameterTuner
     end
 
     methods
-        function this = BoolParameterTuner(name, default_value, updateCallback)
+        function this = BoolParameterTuner(name, default_value)
             assert(default_value == 0 || default_value == 1, 'default value should be 0 or 1');
             this.name = name;
             this.default_value = default_value;
-            this.updateCallback = updateCallback;
         end
 
         function add_name_value_editor(this, parent)
@@ -38,7 +36,6 @@ classdef BoolParameterTuner < ParameterTuner
         function update(this, value)
             this.checkbox.Value = value;
             this.valueField.Text = string(value);
-            this.updateCallback(value);
         end
     end
 end
