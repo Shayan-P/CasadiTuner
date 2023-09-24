@@ -2,11 +2,13 @@ classdef BoolParameterTuner < ParameterTuner
     properties (SetAccess = immutable)
         updateCallback
         uiControlElement
+        name
     end
 
     methods
         function this = BoolParameterTuner(name, default_value, updateCallback)
             assert(default_value == 0 || default_value == 1, 'default value should be 0 or 1');
+            this.name = name;
             this.uiControlElement = uicontrol('Style', 'checkbox', 'String', name, 'Callback', @(element, action) updateCallback(element.Value));
             this.uiControlElement.Value = default_value;
         end

@@ -2,11 +2,14 @@ classdef ScalarParameterTuner < ParameterTuner
     properties (SetAccess = immutable)
         updateCallback
         uiControlElement
+        name
     end
 
     methods
         function this = ScalarParameterTuner(name, lbound, default_value, ubound, updateCallback)
             assert(lbound <= default_value && default_value <= ubound, "lbound <= default_value <= ubound should hold");
+
+            this.name = name;
 
             % this.uiControlElement = uislider('String', name, 'Callback', @(element, action) updateCallback(element.Value));
             
