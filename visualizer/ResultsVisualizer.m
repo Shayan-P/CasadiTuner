@@ -1,15 +1,24 @@
 classdef ResultsVisualizer < handle
     properties
         fig
-        activateResultCallback
+        tree
+        set_result_callback
         opti_result_manager
+    end
+    properties
+        last_selected_opti_result
     end
 
     methods
-        function this = ResultsVisualizer(opti_result_manager, activateResultCallback)
-            this.opti_result_manager = opti_result_manager;
-            this.activateResultCallback = activateResultCallback;
+        function this = ResultsVisualizer(opti_result_manager, set_result_callback)
+            arguments
+                opti_result_manager OptiResultManager
+                set_result_callback function_handle
+            end
 
+            this.opti_result_manager = opti_result_manager;
+            this.set_result_callback = set_result_callback;
+            this.last_selected_opti_result = false;
 
             fig = uifigure('Name', 'Results Panel');
             g = uigridlayout(fig); 
@@ -17,36 +26,42 @@ classdef ResultsVisualizer < handle
             g.RowHeight = {'1x'};
             % todo make a better UI here...
 
-            t = uitree(g, 'Editable', 'on', ...
+            this.tree = uitree(g, 'Editable', 'on', ...
                 'ClickedFcn', @(tree, ~) selectNode(tree.SelectedNodes),...
                 'NodeTextChanged', @(node, ~) node.NodeData.setName(node.Text)); % todo check if callback works correctly
-            t.Layout.Column = 1;
-            t.Layout.Row = 1;
+            this.tree.Layout.Column = 1;
+            this.tree.Layout.Row = 1;
 
-            % for i=1:length(this.opti_result_manager.results)
-            %     opti_result = this.opti_result_manager{i};
-            %     if opti_result.has_parent
-            %         uitreenode(opti_result.parent_result.name, 'Text', string(i));
-            %     else
-            %         uitreenode(opti_result.parent_result.name, 'Text', string(i));
-            %     end
-            % end
-            % nodes = {};
-            % prev = t;
-            % for i=1:30
-            %     nodes{end+1} = uitreenode(prev, 'Text', string(i));
-            %     prev = nodes{end};
-            %     prev.NodeData = i;
-            % end
+            for i=1:length(this.opti_result_manager.results)
+                opti_result = this.opti_result_manager{i};
+                this.add_result(opti_result);
+            end
 
-            % expand(nodes{20});
+            opti_result_manager.add_update_callback(@(opti_result) this.add_result_and_select(opti_result));
+        end
+
+        function tree_node = add_result(this, opti_result)
+            if opti_result.has_parent
+                tree_node = uitreenode(opti_result.parent_result.data, 'Text', opti_result.name);
+            else
+                tree_node = uitreenode(t, 'Text', opti_result.name);
+            end
+            tree_node.NodeData = opti_result;
+            opti_result.data = tree_node;
+        end
+
+        function tree_node = add_result_and_select(this, opti_result)
+            tree_node = this.add_result(opti_result);
+            selectNode(tree_node);
         end
     end
 
     methods(Access=private)
         function selectNode(this, node)
             expand(node)
-            this.activateResultCallback(node.NodeData);
+            this.tree.SelectedNodes = node;
+            this.last_selected_opti_result = node.NodeData;
+            this.set_result_callback(node.NodeData);
         end
     end
 end
