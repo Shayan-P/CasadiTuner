@@ -4,18 +4,19 @@ classdef OptiGUI < handle
         optimize_callback function_handle
         parameters (:, 1)
         tuners cell
+        manager OptiResultManager
     end
 
     methods
-        function this = OptiGUI(opti, optimize_callback)
+        function this = OptiGUI(opti, save_path)
             arguments
                 opti casadi.Opti
-                optimize_callback function_handle
+                save_path string = "opti_gui_results.mat"
             end
             this.opti = opti;
-            this.optimize_callback = optimize_callback;            
             this.parameters = [];
             this.tuners = {};
+            this.manager = OptiResultManager(save_path);
         end
 
         function param = parameter_bool(this, name, default_value)
@@ -79,6 +80,13 @@ classdef OptiGUI < handle
                                         'Callback', @(~, ~) this.optimize_callback(this.opti));
         
             waitfor(fig);
+        end
+    end
+
+    methods(Access=public)
+        % passes proper parameters to this function and calls it
+        function handle_callback(callback)
+            assert(false, "not implemented yet");
         end
     end
 end
