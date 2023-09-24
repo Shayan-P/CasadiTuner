@@ -11,9 +11,13 @@ import CasadiTuner.*;
 
 opti = Opti();
 x = opti.variable();
-opti_gui = OptiGUI(opti, @(opti) optimize_callback(opti, x)); % todo maybe pass the callback in the tune function?
+opti_gui = OptiGUI(opti, "sample_save_file.mat");
 
-opti.solver('ipopt');
+% this is how we can add callbacks manually
+% it will appear in the form of a button
+opti_gui.add_callback("say hello", @(opti_gui) disp("hello"));
+
+% todo. later write a callback that can get all the parameters.
 
 bound = opti_gui.parameter_scalar('bound', 0, 1, 10);
 activate_quad = opti_gui.parameter_bool('activate_quad', true);
@@ -22,21 +26,6 @@ activate_linear = opti_gui.parameter_bool('activate_linear', true);
 opti.minimize(activate_quad * (x^2) + activate_linear * (x));
 opti.subject_to(x >= bound);
 
+opti.solver('ipopt');
+
 opti_gui.tune();
-
-% how to select the previous initial value: another window should open up
-% how to pass callback value
-% how to export/import settings that we want.
-% should we be able to save it to a file?
-% add the ability to use it as simple as possible (maybe just as a visualizer) + capability to use it in a more complicated way as well
-% maybe divide variables into multiple parts? maybe multiple opti guis?
-
-% think about composition...
-    
-function optimize_callback(opti, x)
-    sol = opti.solve();
-    disp("value of x is: ");
-    disp(sol.value(x));
-    disp("value of objective function: ");
-    disp(sol.value(opti.f));
-end
