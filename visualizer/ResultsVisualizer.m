@@ -40,7 +40,7 @@ classdef ResultsVisualizer < handle
             opti_result_manager.add_update_callback(@(opti_result) this.add_result_and_select(opti_result));
         end
 
-        function tree_node = add_result(this, opti_result)
+        function tree_node = add_result(~, opti_result)
             if opti_result.has_parent
                 tree_node = uitreenode(opti_result.parent_result.data, 'Text', opti_result.name);
             else

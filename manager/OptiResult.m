@@ -38,8 +38,8 @@ classdef OptiResult < handle
 
             opti = opti_gui.opti;
             this.opti_x = opti.value(opti.x);
-            this.opti_p = opti.value(opti.x);
-            this.opti_lbg = opti.value(opti.x);
+            this.opti_p = opti.value(opti.p);
+            this.opti_lbg = opti.value(opti.lbg);
             this.opti_ubg = opti.value(opti.ubg);
         end
 
