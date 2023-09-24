@@ -22,10 +22,10 @@ classdef ScalarParameterTuner < ParameterTuner
 
         function add_name_value_editor(this, parent)
             % Name label
-            uilabel(parent, 'Text', tuners.name);
+            uilabel(parent, 'Text', this.name);
             
             % Value label
-            this.valueField = uilabel(parent, 'Text', string(this.getValue()));
+            this.valueField = uilabel(parent, 'Text', string(this.default_value));
             
             % Slider (uislider)
             this.slider = uislider(parent);
@@ -37,7 +37,7 @@ classdef ScalarParameterTuner < ParameterTuner
         end
 
         function output = getValue(this)
-            output = this.uiControlElement.Value;
+            output = this.slider.Value;
         end
     end
 

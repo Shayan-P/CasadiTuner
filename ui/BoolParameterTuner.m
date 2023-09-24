@@ -17,10 +17,10 @@ classdef BoolParameterTuner < ParameterTuner
 
         function add_name_value_editor(this, parent)
             % Name label
-            uilabel(parent, 'Text', tuners.name);
+            uilabel(parent, 'Text', this.name);
             
             % Value label
-            this.valueField = uilabel(parent, 'Text', string(this.getValue()));
+            this.valueField = uilabel(parent, 'Text', string(this.default_value));
 
             % editor
             this.checkbox = uicontrol(parent, 'Style', 'checkbox', 'String', 'turn on', 'Callback', @(element, action) this.update(this.getValue()));
