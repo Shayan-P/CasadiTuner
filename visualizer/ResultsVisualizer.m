@@ -21,6 +21,8 @@ classdef ResultsVisualizer < handle
             this.last_selected_opti_result = false;
 
             fig = uifigure('Name', 'Results Panel');
+            fig.CloseRequestFcn = @(src, ~) this.askForSaveBeforeClose(src); % todo make this optional?
+
             g = uigridlayout(fig); 
             g.ColumnWidth = {'1x'}; 
             g.RowHeight = {'1x'};
@@ -33,7 +35,7 @@ classdef ResultsVisualizer < handle
             this.tree.Layout.Row = 1;
 
             for i=1:length(this.opti_result_manager.results)
-                opti_result = this.opti_result_manager{i};
+                opti_result = this.opti_result_manager.results{i};
                 this.add_result(opti_result);
             end
 
@@ -60,6 +62,16 @@ classdef ResultsVisualizer < handle
     end
 
     methods(Access=private)
+        function askForSaveBeforeClose(this, src)
+            choice = questdlg('save before closing? (location: ' + this.opti_result_manager.filepath + ')', ...
+                  'Save Result', ...
+                  'Yes', 'No', 'Yes');
+            if strcmp(choice, 'Yes')
+                this.opti_result_manager.save();
+            end
+            delete(src);
+        end
+
         function clickCallback(this)
             if ~isempty(this.tree.SelectedNodes)
                 this.selectNode(this.tree.SelectedNodes);
