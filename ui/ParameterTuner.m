@@ -5,7 +5,8 @@ classdef (Abstract) ParameterTuner
     end
 
     methods (Abstract)
-        addToParent(this, parent)
         output = getValue(this)
+        add_name_value_editor(this, parent)
+        update(this, value)
     end
 end
