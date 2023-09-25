@@ -1,12 +1,9 @@
 clear;
 
 addpath('./casadi');
-addpath('./ui');
-addpath('./visualizer');
-addpath('./manager');
 
 import casadi.*;
-import CasadiTuner.*;
+import CasadiTuner.OptiGUI;
 % todo how to automatically tell user to import casadi?
 
 opti = Opti();
