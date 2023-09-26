@@ -1,4 +1,4 @@
-classdef BoolParameterTuner < ParameterTuner
+classdef BoolParameterTuner < CasadiTuner.ParameterTuner
     properties (SetAccess = immutable)
         name
     end

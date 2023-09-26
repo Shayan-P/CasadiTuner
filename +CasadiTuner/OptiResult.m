@@ -24,7 +24,7 @@ classdef OptiResult < handle
     methods (Access=private)
         function this = OptiResult(opti_gui, optional_parent_result)
             arguments
-                opti_gui OptiGUI
+                opti_gui CasadiTuner.OptiGUI
                 optional_parent_result cell
             end
 

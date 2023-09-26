@@ -12,7 +12,7 @@ classdef ResultsVisualizer < handle
     methods
         function this = ResultsVisualizer(opti_result_manager, set_result_callback)
             arguments
-                opti_result_manager OptiResultManager
+                opti_result_manager CasadiTuner.OptiResultManager
                 set_result_callback function_handle
             end
 

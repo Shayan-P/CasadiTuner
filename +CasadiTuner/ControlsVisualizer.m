@@ -2,7 +2,7 @@ classdef ControlsVisualizer < handle
     methods
         function this=ControlsVisualizer(opti_gui, callback_names, callbacks)
             arguments
-                opti_gui OptiGUI
+                opti_gui CasadiTuner.OptiGUI
                 callback_names cell
                 callbacks cell
             end

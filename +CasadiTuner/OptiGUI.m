@@ -3,7 +3,7 @@ classdef OptiGUI < handle
         opti casadi.Opti
         parameters (:, 1)
         tuners cell
-        manager OptiResultManager
+        manager CasadiTuner.OptiResultManager
     end
     properties
         callback_names
@@ -24,13 +24,13 @@ classdef OptiGUI < handle
             this.opti = opti;
             this.parameters = [];
             this.tuners = {};
-            this.manager = OptiResultManager(save_path);
+            this.manager = CasadiTuner.OptiResultManager(save_path);
             this.callback_names = {};
             this.callbacks = {};
 
             % optimize callback. added automatically
             % todo: is this better or should we let the user add it manually?
-            this.add_callback("optimize", @(opti_gui) OptiGUI.optimize_callback(opti_gui));
+            this.add_callback("optimize", @(opti_gui) CasadiTuner.OptiGUI.optimize_callback(opti_gui));
         end
 
         function param = parameter_bool(this, name, default_value)
@@ -41,7 +41,7 @@ classdef OptiGUI < handle
             end
             
             param = this.opti.parameter();
-            tuner = BoolParameterTuner(name, default_value);
+            tuner = CasadiTuner.BoolParameterTuner(name, default_value);
             this.add_parameter_(param, tuner);
         end
 
@@ -55,7 +55,7 @@ classdef OptiGUI < handle
             end
 
             param = this.opti.parameter();
-            tuner = ScalarParameterTuner(name, lbound, default_value, ubound);
+            tuner = CasadiTuner.ScalarParameterTuner(name, lbound, default_value, ubound);
             this.add_parameter_(param, tuner);
         end
     end
@@ -70,9 +70,9 @@ classdef OptiGUI < handle
     methods (Access=private)
         function add_parameter_(this, param, tuner)
             arguments
-                this OptiGUI
+                this CasadiTuner.OptiGUI
                 param % todo type of this is casadi.MX but what about casadi.SX?
-                tuner ParameterTuner
+                tuner CasadiTuner.ParameterTuner
             end
             this.parameters = [this.parameters; param];
             this.tuners{end+1} = tuner;
@@ -126,9 +126,9 @@ classdef OptiGUI < handle
 
     methods
         function tune(this)
-            this.control_panel = ControlsVisualizer(this, this.callback_names, this.callbacks);            
-            this.parameter_panel = ParametersVisualizer(this);
-            this.results_panel = ResultsVisualizer(this.manager, ...
+            this.control_panel = CasadiTuner.ControlsVisualizer(this, this.callback_names, this.callbacks);            
+            this.parameter_panel = CasadiTuner.ParametersVisualizer(this);
+            this.results_panel = CasadiTuner.ResultsVisualizer(this.manager, ...
                                 @(opti_result) this.parameter_panel.update(opti_result.opti_parameters));
         end
     end

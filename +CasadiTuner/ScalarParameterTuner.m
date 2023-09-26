@@ -1,4 +1,4 @@
-classdef ScalarParameterTuner < ParameterTuner
+classdef ScalarParameterTuner < CasadiTuner.ParameterTuner
     properties (SetAccess = immutable)
         name
     end
