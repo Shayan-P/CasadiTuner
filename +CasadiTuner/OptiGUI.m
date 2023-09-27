@@ -125,11 +125,38 @@ classdef OptiGUI < handle
     end
 
     methods
-        function tune(this)
-            this.control_panel = CasadiTuner.ControlsVisualizer(this, this.callback_names, this.callbacks);            
-            this.parameter_panel = CasadiTuner.ParametersVisualizer(this);
-            this.results_panel = CasadiTuner.ResultsVisualizer(this.manager, ...
+        function fig = tune(this)
+            fig = uifigure("Name", "Casadi Tuner");
+            grid = uigridlayout(fig, [1 3]);
+            grid.ColumnWidth = {'4x', '2x', '1x'};
+
+            this.control_panel = CasadiTuner.ControlsVisualizer(grid, this, this.callback_names, this.callbacks);
+            this.control_panel.panel.Layout.Column = 3;
+            this.control_panel.panel.Layout.Row = 1;
+
+            this.parameter_panel = CasadiTuner.ParametersVisualizer(grid, this);
+            this.parameter_panel.panel.Layout.Column = 2;
+            this.parameter_panel.panel.Layout.Row = 1;
+
+            this.results_panel = CasadiTuner.ResultsVisualizer(grid, this.manager, ...
                                 @(opti_result) this.parameter_panel.update(opti_result.opti_parameters));
+            this.results_panel.panel.Layout.Column = 1;
+            this.results_panel.panel.Layout.Row = 1;
+
+            % todo. move this to parent class?
+            fig.CloseRequestFcn = @(src, ~) this.askForSaveBeforeClose(src); % todo make this optional?
+        end
+    end
+
+    methods(Access=private)
+        function askForSaveBeforeClose(this, src)
+            choice = questdlg('save before closing? (location: ' + this.manager.filepath + ')', ...
+                  'Save Result', ...
+                  'Yes', 'No', 'Yes');
+            if strcmp(choice, 'Yes')
+                this.manager.save();
+            end
+            delete(src);
         end
     end
 end

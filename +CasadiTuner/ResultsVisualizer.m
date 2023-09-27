@@ -1,6 +1,6 @@
 classdef ResultsVisualizer < handle
     properties
-        fig
+        panel
         tree
         set_result_callback
         opti_result_manager
@@ -10,8 +10,9 @@ classdef ResultsVisualizer < handle
     end
 
     methods
-        function this = ResultsVisualizer(opti_result_manager, set_result_callback)
+        function this = ResultsVisualizer(parent, opti_result_manager, set_result_callback)
             arguments
+                parent
                 opti_result_manager CasadiTuner.OptiResultManager
                 set_result_callback function_handle
             end
@@ -20,10 +21,8 @@ classdef ResultsVisualizer < handle
             this.set_result_callback = set_result_callback;
             this.last_selected_opti_result = false;
 
-            fig = uifigure('Name', 'Results Panel');
-            fig.CloseRequestFcn = @(src, ~) this.askForSaveBeforeClose(src); % todo make this optional?
-
-            g = uigridlayout(fig); 
+            g = uigridlayout(parent);
+            this.panel = g; 
             g.ColumnWidth = {'1x'}; 
             g.RowHeight = {'1x'};
             % todo make a better UI here...
@@ -62,16 +61,6 @@ classdef ResultsVisualizer < handle
     end
 
     methods(Access=private)
-        function askForSaveBeforeClose(this, src)
-            choice = questdlg('save before closing? (location: ' + this.opti_result_manager.filepath + ')', ...
-                  'Save Result', ...
-                  'Yes', 'No', 'Yes');
-            if strcmp(choice, 'Yes')
-                this.opti_result_manager.save();
-            end
-            delete(src);
-        end
-
         function clickCallback(this)
             if ~isempty(this.tree.SelectedNodes)
                 this.selectNode(this.tree.SelectedNodes);

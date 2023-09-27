@@ -1,20 +1,17 @@
 classdef ParametersVisualizer < handle
     properties
-        fig
+        panel
         tuners
     end
 
     methods
-        function this=ParametersVisualizer(opti_gui)
-            this.fig = uifigure('Name', 'Parameter Panel');
+        function this=ParametersVisualizer(parent, opti_gui)
             this.tuners = opti_gui.tuners;
-
-            % Set the figure size
-            this.fig.Position(3:4) = [500, 500];
 
             N = length(this.tuners);
             
-            grid = uigridlayout(this.fig, [N, 3], 'Scrollable', 'on');
+            grid = uigridlayout(parent, [N, 3], 'Scrollable', 'on');
+            this.panel = grid;
             grid.RowHeight = repmat({40}, 1, N);
             grid.ColumnWidth = {'1x', '1x', '1x'};
             grid.Padding = [10, 10, 10, 10];
