@@ -17,15 +17,20 @@ classdef ControlsVisualizer < handle
                 callback_ = callbacks{i};
                 callback = @() callback_(opti_gui);
                 uicontrol('Style', 'pushbutton', 'String', name, 'Parent', box,...
-                          'Callback', @(button, ~) handle_button(callback, button, name));
+                          'Callback', @(button, ~) this.handle_button(callback, button, name));
             end
         end
     end
 
-    methods(Access=private, Static)
-        function handle_button(callback, button, name)
+    methods(Access=private)
+        function handle_button(~, callback, button, name)
             button.String = "Processing...";
-            callback();
+            try
+                callback();
+            catch ME
+                button.String = "Failed: " + name;
+                rethrow(ME);
+            end
             button.String = name;
         end
     end

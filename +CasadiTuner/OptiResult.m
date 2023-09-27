@@ -5,6 +5,7 @@ classdef OptiResult < handle
         opti_p
         opti_lbg
         opti_ubg
+        opti_sol        casadi.OptiSol
         has_parent
     end
 
