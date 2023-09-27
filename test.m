@@ -13,6 +13,7 @@ opti_gui = OptiGUI(opti, "sample_save_file.mat");
 % this is how we can add callbacks manually
 % it will appear in the form of a button
 opti_gui.add_callback("say hello", @(opti_gui) disp("hello"));
+opti_gui.add_callback("wait for 2 sec", @wait_and_print);
 
 % todo. later write a callback that can get all the parameters.
 
@@ -26,3 +27,10 @@ opti.subject_to(x >= bound);
 opti.solver('ipopt');
 
 opti_gui.tune();
+
+
+% sample callback
+function wait_and_print(opti_gui)
+    pause(2);
+    disp("finished waiting");
+end
