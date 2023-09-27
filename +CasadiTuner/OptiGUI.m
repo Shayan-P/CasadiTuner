@@ -91,7 +91,7 @@ classdef OptiGUI < handle
         function set_opti_result(this, opti_result)
             arguments
                 this
-                opti_result OptiResult
+                opti_result CasadiTuner.OptiResult
             end
             this.opti.set_initial(this.opti.x, opti_result.opti_x);
             this.opti.set_value(this.opti.p, opti_result.opti_p);
@@ -114,9 +114,9 @@ classdef OptiGUI < handle
 
             % get opti result
             if last_result == false
-                opti_result = OptiResult.capture_opti_gui_root(opti_gui);
+                opti_result = CasadiTuner.OptiResult.capture_opti_gui_root(opti_gui);
             else
-                opti_result = OptiResult.capture_opti_gui(opti_gui, last_result);
+                opti_result = CasadiTuner.OptiResult.capture_opti_gui(opti_gui, last_result);
             end
 
             % add new result in manager. automatically gets selected in visualizer

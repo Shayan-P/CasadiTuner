@@ -20,7 +20,7 @@ classdef OptiParameters
                     new_names = this.names;    % todo make sure this is copying 
                     new_values = this.values;  % todo make sure this is copying
                     new_values{i} = value;
-                    new_this = OptiParameters(new_names, new_values);
+                    new_this = CasadiTuner.OptiParameters(new_names, new_values);
                     return;
                 end
             end
@@ -47,7 +47,7 @@ classdef OptiParameters
                 param_names{end+1} = opti_gui.tuners{i}.name;
                 param_values{end+1} = opti_gui.tuners{i}.getValue();
             end
-            this = OptiParameters(param_names, param_values);
+            this = CasadiTuner.OptiParameters(param_names, param_values);
         end
     end
 end

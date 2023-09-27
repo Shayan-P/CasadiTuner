@@ -1,6 +1,6 @@
 classdef OptiResult < handle
     properties(SetAccess=immutable)
-        opti_parameters OptiParameters
+        opti_parameters CasadiTuner.OptiParameters
         opti_x
         opti_p
         opti_lbg
@@ -9,7 +9,7 @@ classdef OptiResult < handle
     end
 
     properties(SetAccess=private)
-        parent_result OptiResult
+        parent_result CasadiTuner.OptiResult
     end
 
     properties(SetAccess=private)
@@ -39,7 +39,7 @@ classdef OptiResult < handle
                 this.has_parent = true;    
             end
 
-            this.opti_parameters = OptiParameters.from_opti_gui(opti_gui);
+            this.opti_parameters = CasadiTuner.OptiParameters.from_opti_gui(opti_gui);
 
             opti = opti_gui.opti;
             this.opti_x = opti.value(opti.x);
@@ -61,10 +61,10 @@ classdef OptiResult < handle
 
     methods(Static)
         function this = capture_opti_gui(opti_gui, parent_result)
-            this = OptiResult(opti_gui, {parent_result});
+            this = CasadiTuner.OptiResult(opti_gui, {parent_result});
         end
         function this = capture_opti_gui_root(opti_gui)
-            this = OptiResult(opti_gui, {});
+            this = CasadiTuner.OptiResult(opti_gui, {});
         end
     end
 end

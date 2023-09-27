@@ -29,7 +29,7 @@ classdef ParametersVisualizer < handle
         function update(this, opti_parameters)
             arguments
                 this
-                opti_parameters OptiParameters
+                opti_parameters CasadiTuner.OptiParameters
             end
             
             N = opti_parameters.N;

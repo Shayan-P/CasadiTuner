@@ -22,7 +22,7 @@ classdef OptiResultManager < handle
         function add_result(this, result)
             arguments
                 this
-                result OptiResult
+                result CasadiTuner.OptiResult
             end
             this.results{end+1} = result;
             this.execute_callbacks(result);
