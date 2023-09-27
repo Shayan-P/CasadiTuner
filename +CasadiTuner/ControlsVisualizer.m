@@ -14,10 +14,19 @@ classdef ControlsVisualizer < handle
             box = uiflowcontainer('v0', 'FlowDirection', 'TopDown', 'Parent', fig);
             for i=1:n
                 name = callback_names{i};
-                callback = callbacks{i};
+                callback_ = callbacks{i};
+                callback = @() callback_(opti_gui);
                 uicontrol('Style', 'pushbutton', 'String', name, 'Parent', box,...
-                          'Callback', @(~, ~) callback(opti_gui));
+                          'Callback', @(button, ~) handle_button(callback, button, name));
             end
+        end
+    end
+
+    methods(Access=private, Static)
+        function handle_button(callback, button, name)
+            button.String = "Processing...";
+            callback();
+            button.String = name;
         end
     end
 end
